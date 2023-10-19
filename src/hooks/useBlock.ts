@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-19 17:21:57
+ * @LastEditTime: 2023-10-19 17:53:38
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -29,7 +29,7 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
   /**
    * 输入事件
    * 1. 如果输入 '/' 则开启 select 组件选择下拉列表,否则关闭
-   * 2. 如何在 '/' 后继续输入,则开启搜索模式,匹配下拉列表中包含输入的值并显示
+   * 2. 如果在 '/' 后继续输入,则开启搜索模式,匹配下拉列表中包含输入的值并显示
    * @param BlockEvent 
    */
   const inputEvent = (event: Event) => {
