@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-19 17:53:38
+ * @LastEditTime: 2023-10-20 11:02:42
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -16,7 +16,10 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
   /** 失去焦点: 移除PlaceHolder */
   const blurEvent = (event: Event) => {
     const e = event as BlockEvent
+    selectListVisible.value = false
+    activeSelectIndex.value = 0
     e.target.removeAttribute('data-placeholder')
+
   }
 
   /** 获取焦点: 如果输入框无文本,则增加PlaceHolder */
@@ -24,6 +27,7 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     const e = event as BlockEvent
     if (e.target.innerText.length != 0) return
     e.target.setAttribute('data-placeholder', textPlaceHolder)
+    selectList.value = components
   }
 
   /**
@@ -37,6 +41,14 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     const initData = e.target.textContent!
     e.target.setAttribute('data-placeholder', initData.length <= 0 ? textPlaceHolder : '');
     if (e.data == '/') {
+      const lastTextNode = e.target.lastChild;
+      const range = document.createRange();
+      range.selectNode(lastTextNode!);
+      const rect = range.getBoundingClientRect();
+      console.log(rect, 'rect')
+      const select:any  = document.querySelector('.select')!
+      select.style.top = `${rect.bottom}px`;
+      select.style.left = `${rect.left}px`;
       selectListVisible.value = true
     }
     if (!e.target.innerText.includes('/')) {
@@ -45,7 +57,12 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     if (e.target.innerText.includes('/')) {
       const component = e.target.innerText.split('/').at(-1)!
       if (component == '') return selectList.value = components
-      selectList.value = components.filter(item => item.name.includes(component))
+     console.log(222222)
+      selectList.value = components.filter(item => item.name.includes(component)).length > 0 ? components.filter(item => item.name.includes(component)) : [{
+        name: '暂无匹配数据',
+        component: 'none',
+        active: false,
+      }]
     }
   }
 
@@ -56,25 +73,31 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
    */
   const keyPressEvent = (event: Event) => {
     const e = event as BlockEvent
+
     if (e.code == 'Enter') {
       e.preventDefault()
       if (!selectListVisible.value) {
         nextTick(() => {
-          blocks.value.push({ name: 'blocksRef' });
+          blocks.value.push({ name: 'text' });
           (blocksRef.value as any).at(-1).focus()
         })
       }
       if (selectListVisible.value) {
+        if (selectList.value[activeSelectIndex.value]?.component == 'none') return
         blocks.value.push({ name: selectList.value[activeSelectIndex.value]?.component || '' });
+        const text = e.target.innerText.split('/')
+        e.target.innerText = text.slice(0, text.length - 1).join('/')
         e.target.blur()
+        selectListVisible.value = false
+        activeSelectIndex.value = 0
+        updateSelection()
         nextTick(() => {
           (blocksRef.value as any).at(-1).removeAttribute('data-placeholder');
           (blocksRef.value as any).at(-1).setAttribute('contenteditable', 'false')
           blocks.value.push({ name: 'text' });
+          (blocksRef.value as any).at(-1).focus()
         })
-        selectListVisible.value = false
-        activeSelectIndex.value = 0
-        updateSelection()
+       
       }
     }
   }
@@ -105,7 +128,7 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
       updateSelection();
     }
   }
-  onMounted(()=>updateSelection())
+  onMounted(() => updateSelection())
   return {
     inputEvent,
     keyPressEvent,
