@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-23 17:35:18
+ * @LastEditTime: 2023-10-23 17:42:34
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -29,7 +29,7 @@ onMounted(()=>{
 </script>
 <template>
   <div class="container">
-    <basicEditor ref="blocksRef" :value="item.input" v-for="item,index in blocks" :key="index" 
+    <basic-editor ref="blocksRef" :value="item.input" v-for="item,index in blocks" :key="index" 
       class="container-block" 
       data-placeholder=""
       contenteditable="true" 
@@ -40,7 +40,7 @@ onMounted(()=>{
       @keydown="keyDownEvent">
       <h3>{{ item.input }}</h3>
       <component :is="item.name"></component>
-    </basicEditor>
+    </basic-editor>
     <div class="select" v-show="selectListVisible">
       <div 
         v-for="item,index in selectList" 
