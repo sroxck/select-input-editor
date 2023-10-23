@@ -2,14 +2,15 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-20 10:59:46
+ * @LastEditTime: 2023-10-23 17:35:18
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { components } from '../utils/dict'
 import { useBlock } from '../hooks/useBlock'
-const blocks = ref([{ name: 'text' }])
+import basicEditor from './basic-editor.vue'
+const blocks = ref([{ input:'',name: 'text1' },{ input:'',name: 'text2' },{ input:'',name: 'text3' },{ input:'',name: 'text4' },{ input:'',name: 'text5' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
@@ -20,21 +21,26 @@ const {
   keyDownEvent, 
   focusEvent, 
   blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible)
+onMounted(()=>{
+  console.log(blocksRef,
+  'blocksRef')
+})
 
 </script>
 <template>
   <div class="container">
-    <div ref="blocksRef" v-for="item in blocks" :key="item.name" 
+    <basicEditor ref="blocksRef" :value="item.input" v-for="item,index in blocks" :key="index" 
       class="container-block" 
-      data-placeholder="click this"
+      data-placeholder=""
       contenteditable="true" 
       @blur="blurEvent" 
+      @input="inputEvent($event,index)"
       @focus="focusEvent" 
-      @input="inputEvent" 
-      @keypress="keyPressEvent"
+      @keypress="keyPressEvent($event, index)"
       @keydown="keyDownEvent">
+      <h3>{{ item.input }}</h3>
       <component :is="item.name"></component>
-    </div>
+    </basicEditor>
     <div class="select" v-show="selectListVisible">
       <div 
         v-for="item,index in selectList" 
