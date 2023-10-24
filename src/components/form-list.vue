@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-24 15:19:54
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 15:42:13
+ * @LastEditTime: 2023-10-24 15:51:42
  * @Description: 
 -->
 <script setup lang="ts">
@@ -11,8 +11,8 @@
 </script>
 
 <template>
-  <div class="list">
-    <div class="list-item">
+  <el-row class="list">
+    <el-col class="list-item" :span="12" :xs="24">
         <div class="title">
          
           Get started
@@ -37,8 +37,8 @@
           <el-icon><MagicStick /></el-icon>
           Learn about Tally Pro
         </div>
-    </div>
-    <div class="list-item">
+    </el-col>
+    <el-col class="list-item" :span="12" :xs="24">
       <div class="title">
       
         How-to guides
@@ -63,14 +63,15 @@
         <el-icon><GoldMedal /></el-icon>
         Collect payments
       </div>
-    </div>
-  </div>
+    </el-col>
+  </el-row>
 </template>
 <style>
 .list{
-  display: flex;
+  /* display: flex; */
   margin-top: 50px;
-  gap: 80px;
+  /* gap: 80px; */
+  width: 600px;
 }
 
 .list-item div{
