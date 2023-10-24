@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:05:30
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-20 10:51:16
+ * @LastEditTime: 2023-10-24 13:56:51
  * @Description: 
  */
 export const textPlaceHolder = `Type '/' to select a component`
