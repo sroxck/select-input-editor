@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 13:47:41
+ * @LastEditTime: 2023-10-24 14:35:26
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -12,7 +12,7 @@ import tip from '../components/tip.vue'
 import { components } from '../utils/dict'
 import { useBlock } from '../hooks/useBlock'
 import basicEditor from './basic-editor.vue'
-const blocks = ref([{ input: '', name: 'text1' }])
+const blocks = ref([{ input: '', name: '' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
@@ -62,9 +62,8 @@ const startForm = () => {
     </div>
     <div v-show="isFormStart">
       <basic-editor ref="blocksRef" :value="item.input" v-for="item, index in blocks" :key="index" class="container-block"
-        data-placeholder="" contenteditable="true" @blur="blurEvent" @input="inputEvent($event, index)"
+        data-placeholder=""  @blur="blurEvent" @input="inputEvent($event, index)"
         @focus="focusEvent" @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent">
-        <h3>{{ item.input }}</h3>
         <component :is="item.name"></component>
       </basic-editor>
     </div>
@@ -77,7 +76,6 @@ const startForm = () => {
           {{ item.name }}
         </span>
         <span v-show="item.component != '-'">{{ item.name }}</span>
-
       </div>
     </div>
   </div>
@@ -92,7 +90,7 @@ const startForm = () => {
 
 .container-tip-button .button {
   border-radius: 5px;
-  padding      : 2px 8px;
+  padding      : 4px 8px;
   display      : inline-block;
   cursor       : pointer;
   width        : fit-content;
@@ -161,7 +159,7 @@ const startForm = () => {
   width        : 300px;
   max-height   : 321px;
   background   : #fff;
-
+  line-height: 1.6;
 }
 
 .select-item {

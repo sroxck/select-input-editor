@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 11:14:12
+ * @LastEditTime: 2023-10-24 14:33:19
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -61,14 +61,16 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     const initData = e.target.textContent!
     e.target.setAttribute('data-placeholder', initData.length <= 0 ? textPlaceHolder : '');
     if (e.data == '/') {
-      const lastTextNode = e.target.lastChild;
+      const lastTextNode = e.target.childNodes[0];
+    
       const range = document.createRange();
       range.selectNode(lastTextNode!);
       const rect = range.getBoundingClientRect();
-      console.log(rect, 'rect')
+     
       const select: any = document.querySelector('.select')!
+
       select.style.top = `${rect.bottom}px`;
-      select.style.left = `${rect.left}px`;
+      select.style.left = `${rect.right}px`;
       selectListVisible.value = true
     }
     if (!e.target.innerText.includes('/')) {
@@ -113,17 +115,16 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
       if (selectListVisible.value) {
         if (selectList.value[activeSelectIndex.value]?.component == 'none') return
         blocks.value.push({ name: selectList.value[activeSelectIndex.value]?.component || '' });
-
         e.target.innerText = text.slice(0, text.length - 1).join('/')
         e.target.blur()
         selectListVisible.value = false
         activeSelectIndex.value = 0
         updateSelection()
         nextTick(() => {
-          blocksRef.value.at(-1).removeAttribute('data-placeholder');
-          blocksRef.value.at(-1).setAttribute('contenteditable', 'false')
+          blocksRef.value.at(-1).divRef.removeAttribute('data-placeholder');
+          blocksRef.value.at(-1).divRef.setAttribute('contenteditable', 'false')
           blocks.value.push({ name: 'text' });
-          blocksRef.value.at(-1).focus()
+          blocksRef.value.at(-1).divRef.focus()
         })
 
       }

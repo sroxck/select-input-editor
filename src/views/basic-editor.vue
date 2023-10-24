@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-23 16:12:03
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-23 17:41:11
+ * @LastEditTime: 2023-10-24 14:10:54
  * @Description: 
 -->
 <script setup lang="ts">
@@ -19,5 +19,6 @@ defineExpose({
 <template>
   <div contenteditable="true" :value="value" ref="divRef">
     {{ value }}
+    <slot></slot>
   </div>
 </template>
