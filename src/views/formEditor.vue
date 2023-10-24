@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 14:35:26
+ * @LastEditTime: 2023-10-24 15:04:44
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -12,7 +12,7 @@ import tip from '../components/tip.vue'
 import { components } from '../utils/dict'
 import { useBlock } from '../hooks/useBlock'
 import basicEditor from './basic-editor.vue'
-const blocks = ref([{ input: '', name: '' }])
+const blocks = ref([{ input: '', name: 'text' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
@@ -71,6 +71,11 @@ const startForm = () => {
       <div v-for="item, index in selectList" :key="index"
         :class="{ 'select-item': true, active: item.active && item.component != '-', noHover: item.component == '-' }"
         tabindex="0">
+        <span>
+          <el-icon :size="15" style="margin-right:5px" v-if="item.icon">
+            <component :is="item.icon"  />
+          </el-icon>
+        </span>
         <div v-show="item.component == '-' && index != 0" style="height:1px;background-color: #eee;"></div>
         <span v-show="item.component == '-'" class="category">
           {{ item.name }}
@@ -91,6 +96,7 @@ const startForm = () => {
 .container-tip-button .button {
   border-radius: 5px;
   padding      : 4px 8px;
+  user-select:none;
   display      : inline-block;
   cursor       : pointer;
   width        : fit-content;

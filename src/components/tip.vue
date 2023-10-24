@@ -20,6 +20,7 @@
   color      : rgb(55, 53, 47);
   line-height: 1.5;
   font-size  : 16px;
+  user-select:none;
 }
 
 .tip em {
