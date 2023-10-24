@@ -2,16 +2,16 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 15:04:44
+ * @LastEditTime: 2023-10-24 15:16:57
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useI18n } from 'vue-i18n'
-import tip from '../components/tip.vue'
 import { components } from '../utils/dict'
 import { useBlock } from '../hooks/useBlock'
 import basicEditor from './basic-editor.vue'
+import Tip from '../components/tip.vue'
 const blocks = ref([{ input: '', name: 'text' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
@@ -25,58 +25,66 @@ const {
   isFormStart,
   focusEvent,
   blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible)
-  onMounted(() => {
-      console.log(blocksRef,
-        'blocksRef')
-    })
+
 const startForm = () => {
   isFormStart.value = true
   nextTick(() => {
     (blocksRef.value as any)[0].divRef.focus()
   })
 }
-	const I18n = useI18n()
-	const { locale } = useI18n()
-	// console.log('locale' ,I18n) 
-  const zh = ()=>{
-    locale.value= locale.value== 'zh-cn' ? 'en-us': 'zh-cn'
-  }
+const { locale } = useI18n()
+const zh = () => {
+  locale.value = locale.value == 'zh-cn' ? 'en-us' : 'zh-cn'
+}
 </script>
 <template>
   <div class="container">
-    <basic-editor @keypress="titlePressEvent($event, 0)" @input="titleEvent($event, true)" ref="" class="container-title"
-      data-placeholder="Form Title" contenteditable="true">
-    </basic-editor>
+    <basic-editor 
+      @keypress="titlePressEvent($event, 0)" 
+      @input="titleEvent($event, true)"  
+      class="container-title"
+      data-placeholder="Form Title" 
+      contenteditable="true"/>
     <div v-show="!isFormStart">
       <div class="container-tip-button">
         <div class="button" style="margin-bottom:15px" @click="startForm">
-          <el-icon :size="15" style="margin-right:5px">
-            <Edit />
-          </el-icon><span>{{ $t('button.first') }}</span>
+          <el-icon :size="15" style="margin-right:5px"><Edit /></el-icon>
+          <span>{{ $t('button.first') }}</span>
         </div>
-        <div class="button" style="" @click="zh"><el-icon :size="15" style="margin-right:5px;">
-            <CopyDocument />
-          </el-icon><span>{{ $t('button.last')}}</span></div>
+        <div class="button" style="" @click="zh">
+          <el-icon :size="15" style="margin-right:5px;"><CopyDocument /></el-icon>
+          <span>{{ $t('button.last') }}</span></div>
       </div>
-      <tip></tip>
+      <Tip/>
     </div>
     <div v-show="isFormStart">
-      <basic-editor ref="blocksRef" :value="item.input" v-for="item, index in blocks" :key="index" class="container-block"
-        data-placeholder=""  @blur="blurEvent" @input="inputEvent($event, index)"
-        @focus="focusEvent" @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent">
+      <basic-editor 
+        v-for="item, index in blocks" 
+        :key="index" 
+        :value="item.input" 
+        @blur="blurEvent" 
+        @input="inputEvent($event, index)" 
+        @focus="focusEvent"
+        @keypress="keyPressEvent($event, index)" 
+        @keydown="keyDownEvent"
+        ref="blocksRef" 
+        class="container-block"
+        data-placeholder="" >
         <component :is="item.name"></component>
       </basic-editor>
     </div>
     <div class="select" v-show="selectListVisible">
       <div v-for="item, index in selectList" :key="index"
-        :class="{ 'select-item': true, active: item.active && item.component != '-', noHover: item.component == '-' }"
+        :class="{ 'select-item': true, 
+        active: item.active && item.component != '-', noHover: item.component == '-' }"
         tabindex="0">
         <span>
           <el-icon :size="15" style="margin-right:5px" v-if="item.icon">
-            <component :is="item.icon"  />
+            <component :is="item.icon" />
           </el-icon>
         </span>
-        <div v-show="item.component == '-' && index != 0" style="height:1px;background-color: #eee;"></div>
+        <div v-show="item.component == '-' && index != 0" 
+        style="height:1px;background-color: #eee;"></div>
         <span v-show="item.component == '-'" class="category">
           {{ item.name }}
         </span>
@@ -96,7 +104,7 @@ const startForm = () => {
 .container-tip-button .button {
   border-radius: 5px;
   padding      : 4px 8px;
-  user-select:none;
+  user-select  : none;
   display      : inline-block;
   cursor       : pointer;
   width        : fit-content;
@@ -165,7 +173,7 @@ const startForm = () => {
   width        : 300px;
   max-height   : 321px;
   background   : #fff;
-  line-height: 1.6;
+  line-height  : 1.6;
 }
 
 .select-item {
