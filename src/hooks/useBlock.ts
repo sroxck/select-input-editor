@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-23 17:37:17
+ * @LastEditTime: 2023-10-24 11:14:12
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -22,11 +22,27 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
 
   }
 
-  /** 获取焦点: 如果输入框无文本,则增加PlaceHolder */
-  const focusEvent = (event: Event) => {
+  /** */
+  const titleEvent = (event: Event, title: boolean) => {
+    console.log(event)
     const e = event as BlockEvent
-    if (e.target.innerText.length != 0) return
-    e.target.setAttribute('data-placeholder', textPlaceHolder)
+    if (e.target.innerText.length != 0) {
+      e.target.setAttribute('data-placeholder', '');
+    } else {
+      e.target.setAttribute('data-placeholder', title ? 'Form Title' : textPlaceHolder)
+    }
+    selectList.value = components
+  }
+
+  /** 获取焦点: 如果输入框无文本,则增加PlaceHolder */
+  const focusEvent = (event: Event, title: boolean) => {
+    console.log(event)
+    const e = event as BlockEvent
+    if (e.target.innerText.length != 0) {
+      e.target.setAttribute('data-placeholder', '');
+    } else {
+      e.target.setAttribute('data-placeholder', title ? 'Form Title' : textPlaceHolder)
+    }
     selectList.value = components
   }
 
@@ -104,10 +120,10 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
         activeSelectIndex.value = 0
         updateSelection()
         nextTick(() => {
-           blocksRef.value.at(-1).removeAttribute('data-placeholder');
-           blocksRef.value.at(-1).setAttribute('contenteditable', 'false')
+          blocksRef.value.at(-1).removeAttribute('data-placeholder');
+          blocksRef.value.at(-1).setAttribute('contenteditable', 'false')
           blocks.value.push({ name: 'text' });
-           blocksRef.value.at(-1).focus()
+          blocksRef.value.at(-1).focus()
         })
 
       }
@@ -141,7 +157,33 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     }
   }
   onMounted(() => updateSelection())
+  const isFormStart = ref(false)
+
+  const titlePressEvent = (event: Event, index: number = 0) => {
+    const e = event as BlockEvent as any
+    // 获取光标之后的文本,回车的时候如果光标后面有文本则换到下一行 
+    const value = e.target.innerText
+    const selObj = window.getSelection()!.anchorOffset;
+    const enterTextBefore = value.split('').splice(selObj).join('')
+    if (e.code == 'Enter') {
+      e.preventDefault()
+      isFormStart.value = true
+      if (!selectListVisible.value) {
+        // blocks.value.splice(0, 0, { input: `` });
+        // 把当前行光标后的内容替换为空
+        e.target.innerText = e.target.innerText.replace(enterTextBefore, '')
+        //设置回车后的下一行的内容为光标后的值
+        blocks.value[0].input = enterTextBefore
+        nextTick(() => {
+          blocksRef.value.at(0).divRef.focus()
+        })
+      }
+    }
+  }
   return {
+    isFormStart,
+    titleEvent,
+    titlePressEvent,
     inputEvent,
     keyPressEvent,
     keyDownEvent,

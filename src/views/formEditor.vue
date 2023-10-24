@@ -2,37 +2,45 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 10:24:59
+ * @LastEditTime: 2023-10-24 11:13:18
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import { components } from '../utils/dict'
 import { useBlock } from '../hooks/useBlock'
 import basicEditor from './basic-editor.vue'
-const blocks = ref([{ input: '', name: 'text1' }, { input: '', name: 'text2' }, { input: '', name: 'text3' }, { input: '', name: 'text4' }, { input: '', name: 'text5' }])
+const blocks = ref([{ input: '', name: 'text1' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
-
 const {
   inputEvent,
+  titleEvent,
   keyPressEvent,
+  titlePressEvent,
   keyDownEvent,
+  isFormStart,
   focusEvent,
   blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible)
 onMounted(() => {
   console.log(blocksRef,
     'blocksRef')
 })
-
+const startForm = ()=>{
+  isFormStart.value = true
+  nextTick(()=>{
+    (blocksRef.value as any)[0].divRef.focus()
+  })
+}
 </script>
 <template>
   <div class="container">
-    <basic-editor ref="" class="container-title" data-placeholder="Form Title" contenteditable="true">
+    <basic-editor @keypress="titlePressEvent($event,0)" @input="titleEvent($event,true)" ref="" class="container-title" data-placeholder="Form Title" contenteditable="true">
     </basic-editor>
+   <div  v-show="!isFormStart">
     <div class="container-tip-button">
-      <div class="button" style="margin-bottom:15px">
+      <div class="button" style="margin-bottom:15px" @click="startForm">
         <el-icon :size="15" style="margin-right:5px">
           <Edit />
         </el-icon><span>Press Enter to start form create</span>
@@ -49,12 +57,15 @@ onMounted(() => {
       <em>/</em>
       to insert form blocks 
     </div>
-    <basic-editor ref="blocksRef" :value="item.input" v-for="item, index in blocks" :key="index" class="container-block"
+   </div>
+    <div v-show="isFormStart">
+      <basic-editor  ref="blocksRef" :value="item.input" v-for="item, index in blocks" :key="index" class="container-block"
       data-placeholder="" contenteditable="true" @blur="blurEvent" @input="inputEvent($event, index)" @focus="focusEvent"
       @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent">
       <h3>{{ item.input }}</h3>
       <component :is="item.name"></component>
     </basic-editor>
+    </div>
     <div class="select" v-show="selectListVisible">
       <div v-for="item, index in selectList" :key="index"
         :class="{ 'select-item': true, active: item.active && item.component != '-', noHover: item.component == '-' }"
@@ -118,6 +129,7 @@ onMounted(() => {
 .container-block {
   outline: none;
   margin-top: 20px;
+  padding: 0 8px;
 }
 
 .container-title {
@@ -129,12 +141,7 @@ onMounted(() => {
   font-weight: 800;
 }
 
-.container-block:before {
-  font-size: 40px;
-  display: block;
-  color: gray;
-  content: attr(data-placeholder);
-}
+
 
 .container-title:before {
   color: gray;
