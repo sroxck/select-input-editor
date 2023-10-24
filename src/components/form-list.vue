@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-24 15:19:54
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 15:51:42
+ * @LastEditTime: 2023-10-24 17:51:38
  * @Description: 
 -->
 <script setup lang="ts">
@@ -15,53 +15,55 @@
     <el-col class="list-item" :span="12" :xs="24">
         <div class="title">
          
-          Get started
+          {{$t('list.left.title')}}
         </div>
         <div class="text">
           <el-icon><Position /></el-icon>
-          Create your first form
+          {{$t('list.left.title')}}
+
         </div>
         <div class="text">
           <el-icon><Files /></el-icon>
-          Get started with templates
+          {{$t('list.left.text1')}}
+
         </div>
         <div class="text">
           <el-icon><FolderOpened /></el-icon>
-          Embed your form
+          {{$t('list.left.text2')}}
         </div>
         <div class="text">
           <el-icon><Search /></el-icon>
-          Help center
+          {{$t('list.left.text3')}}
         </div>
         <div class="text">
           <el-icon><MagicStick /></el-icon>
-          Learn about Tally Pro
+          {{$t('list.left.text4')}}
         </div>
     </el-col>
     <el-col class="list-item" :span="12" :xs="24">
       <div class="title">
       
-        How-to guides
+       {{$t('list.right.title')}}
       </div>
       <div class="text">
         <el-icon><Connection /></el-icon>
-        Conditional logic
+        {{$t('list.right.text1')}}
       </div>
       <div class="text">
         <el-icon><Close /></el-icon>
-        Calculator
+        {{$t('list.right.text2')}}
       </div>
       <div class="text">
         <el-icon><Hide /></el-icon>
-        Hidden fields
+        {{$t('list.right.text3')}}
       </div>
       <div class="text">
         <el-icon><Stopwatch /></el-icon>
-        Mentions
+        {{$t('list.right.text4')}}
       </div>
       <div class="text">
         <el-icon><GoldMedal /></el-icon>
-        Collect payments
+        {{$t('list.right.text5')}}
       </div>
     </el-col>
   </el-row>
