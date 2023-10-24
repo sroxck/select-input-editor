@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 15:16:57
+ * @LastEditTime: 2023-10-24 15:43:14
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -11,7 +11,8 @@ import { useI18n } from 'vue-i18n'
 import { components } from '../utils/dict'
 import { useBlock } from '../hooks/useBlock'
 import basicEditor from './basic-editor.vue'
-import Tip from '../components/tip.vue'
+import FormTip from '../components/form-tip.vue'
+import FormList from '../components/form-list.vue'
 const blocks = ref([{ input: '', name: 'text' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
@@ -43,7 +44,7 @@ const zh = () => {
       @keypress="titlePressEvent($event, 0)" 
       @input="titleEvent($event, true)"  
       class="container-title"
-      data-placeholder="Form Title" 
+      data-placeholder="Form title" 
       contenteditable="true"/>
     <div v-show="!isFormStart">
       <div class="container-tip-button">
@@ -55,7 +56,7 @@ const zh = () => {
           <el-icon :size="15" style="margin-right:5px;"><CopyDocument /></el-icon>
           <span>{{ $t('button.last') }}</span></div>
       </div>
-      <Tip/>
+      <form-tip/>
     </div>
     <div v-show="isFormStart">
       <basic-editor 
@@ -73,6 +74,7 @@ const zh = () => {
         <component :is="item.name"></component>
       </basic-editor>
     </div>
+    <FormList v-show="!isFormStart" ></FormList>
     <div class="select" v-show="selectListVisible">
       <div v-for="item, index in selectList" :key="index"
         :class="{ 'select-item': true, 
