@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-26 15:00:58
+ * @LastEditTime: 2023-10-26 17:07:32
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -37,7 +37,6 @@ const startForm = () => {
 </script>
 <template>
   <div class="container">
-    <SvgIcon name="logo" color="primary" size="large"></SvgIcon>
     <tool-bar></tool-bar>
     <basic-editor @keypress="titlePressEvent($event, 0)" @input="titleEvent($event, true)" class="container-title"
       data-placeholder="Form title" contenteditable="true" />
@@ -61,15 +60,15 @@ const startForm = () => {
     <div v-show="isFormStart">
 
       <div v-for="item, index in blocks" :key="index" class="box">
-        <div class="icon">
+        <div class="iconBox">
           <el-icon>
-            <CloseBold />
+            <SvgIcon name="shanchu"  size="large"></SvgIcon>
           </el-icon>
           <el-icon>
-            <Plus />
+            <SvgIcon name="tianjia" color="primary" size="large"></SvgIcon>
           </el-icon>
           <el-icon>
-            <MoreFilled />
+            <SvgIcon name="tuozhuai" color="primary" size="large"></SvgIcon>
           </el-icon>
         </div>
         <basic-editor :value="item.input" @blur="blurEvent" @input="inputEvent($event, index)" @focus="focusEvent"
@@ -106,7 +105,7 @@ const startForm = () => {
 .box{
   position: relative;
 }
-.box:hover .icon{
+.box:hover .iconBox{
   display: block;
 }
 .container-tip-button {
@@ -126,7 +125,7 @@ const startForm = () => {
   align-items: center;
 }
 
-.icon {
+.iconBox {
   display: none;
   position: absolute;
   top: -3px;
