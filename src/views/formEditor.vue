@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-26 17:07:32
+ * @LastEditTime: 2023-10-26 17:40:03
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -60,7 +60,7 @@ const startForm = () => {
     <div v-show="isFormStart">
 
       <div v-for="item, index in blocks" :key="index" class="box">
-        <div class="iconBox">
+        <div :class="['iconBox',!['text','',null,undefined].includes(item.name)?'action':'']" >
           <el-icon>
             <SvgIcon name="shanchu"  size="large"></SvgIcon>
           </el-icon>
@@ -124,7 +124,9 @@ const startForm = () => {
   display: flex;
   align-items: center;
 }
-
+.action{
+  top: 3px !important;
+}
 .iconBox {
   display: none;
   position: absolute;
