@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-24 13:28:05
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 17:52:31
+ * @LastEditTime: 2023-10-26 10:39:25
  * @Description: 
  */
 export default {
@@ -15,7 +15,10 @@ export default {
   },
  button:{
     first:"按下 Enter 开始创建表单",
-    last:"使用预设模板"
+    last:"使用预设模板",
+    preview:'预览',
+    publish:'发布',
+    language:'语言'
   },
   placeHolder:`输入 “/” 来选择一个组件`,
   list:{

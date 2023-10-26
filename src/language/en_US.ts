@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-24 13:28:05
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 17:51:49
+ * @LastEditTime: 2023-10-26 10:40:53
  * @Description: 
  */
 export default {
@@ -15,7 +15,10 @@ export default {
   },
   button:{
     first:"Press Enter to start form create",
-    last:"Use a template"
+    last:"Use a template",
+    preview:'Preview',
+    publish:'Publish',
+    language:'Language'
   },
   placeHolder:"Type '/' to select a component",
   list:{
