@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-27 10:54:24
+ * @LastEditTime: 2023-10-27 14:17:01
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -10,6 +10,7 @@ import { components, textPlaceHolder } from '../utils/dict'
 import { nextTick, onMounted, ref, type Ref } from "vue"
 
 const activeSelectIndex = ref(0)
+const isFormStart = ref(false)
 
 export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectListVisible: Ref) {
 
@@ -95,6 +96,7 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
    */
   const keyPressEvent = (event: Event, index: number) => {
     const e = event as BlockEvent as any
+    console.log(e,'e')
     // 获取光标之后的文本,回车的时候如果光标后面有文本则换到下一行 
     const text = e.target.innerText.split('/')
     const value = e.target.innerText
@@ -146,6 +148,13 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
 
   /** 注册方向按键事件,获取当前所选择的组件 */
   const keyDownEvent = (e: any) => {
+    if(e.code == 'Backspace'){
+      console.log(e.target.innerText)
+      if(e.target.innerText == '' && blocks.value.length == 1){
+        isFormStart.value = false
+      }
+    }
+    console.log(e,'测试')
     // 下箭头事件
     if (e.code == 'ArrowDown') {
       e.preventDefault();
@@ -160,7 +169,6 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     }
   }
   onMounted(() => updateSelection())
-  const isFormStart = ref(false)
 
   const titlePressEvent = (event: Event, index: number = 0) => {
     const e = event as BlockEvent as any
