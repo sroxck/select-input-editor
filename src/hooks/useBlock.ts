@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-27 14:17:01
+ * @LastEditTime: 2023-10-27 16:01:26
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -63,11 +63,11 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     e.target.setAttribute('data-placeholder', initData.length <= 0 ? textPlaceHolder : '');
     if (e.data == '/') {
       const lastTextNode = e.target.childNodes[0];
-    
+
       const range = document.createRange();
       range.selectNode(lastTextNode!);
       const rect = range.getBoundingClientRect();
-     
+
       const select: any = document.querySelector('.select')!
 
       select.style.top = `${rect.bottom}px`;
@@ -96,7 +96,7 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
    */
   const keyPressEvent = (event: Event, index: number) => {
     const e = event as BlockEvent as any
-    console.log(e,'e')
+    console.log(e, 'e')
     // 获取光标之后的文本,回车的时候如果光标后面有文本则换到下一行 
     const text = e.target.innerText.split('/')
     const value = e.target.innerText
@@ -107,12 +107,13 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
       if (!selectListVisible.value) {
         blocks.value.splice(index + 1, 0, { input: `` });
         // 把当前行光标后的内容替换为空
-        e.target.innerText = e.target.innerText.replace(enterTextBefore, '')
-        blocks.value[index].input = e.target.innerText
+        e.target.textContent = e.target.innerText.replace(enterTextBefore, '')
+        blocks.value[index].input = e.target.textContent
 
         //设置回车后的下一行的内容为光标后的值
         blocks.value[index + 1].input = enterTextBefore
         nextTick(() => {
+          blocksRef.value.at(Number(index) + 1).divRef.innerText = enterTextBefore
           blocksRef.value.at(Number(index) + 1).divRef.focus()
         })
       }
@@ -148,13 +149,13 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
 
   /** 注册方向按键事件,获取当前所选择的组件 */
   const keyDownEvent = (e: any) => {
-    if(e.code == 'Backspace'){
+    if (e.code == 'Backspace') {
       console.log(e.target.innerText)
-      if(e.target.innerText == '' && blocks.value.length == 1){
+      if (e.target.innerText == '' && blocks.value.length == 1) {
         isFormStart.value = false
       }
     }
-    console.log(e,'测试')
+    console.log(e, '测试')
     // 下箭头事件
     if (e.code == 'ArrowDown') {
       e.preventDefault();

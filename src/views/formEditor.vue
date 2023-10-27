@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-27 11:04:23
+ * @LastEditTime: 2023-10-27 16:00:43
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -79,7 +79,7 @@ const deleteCurrentItem = (index: number) => {
             <SvgIcon name="tuozhuai" color="primary" size="large"></SvgIcon>
           </el-icon>
         </div>
-        <basic-editor :value="item.input" @blur="blurEvent" @input="inputEvent($event, index)" @focus="focusEvent"
+        <basic-editor @blur="blurEvent" @input="inputEvent($event, index)" @focus="focusEvent"
           @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent" ref="blocksRef" class="container-block"
           data-placeholder="">
           <component :is="item.name"></component>
