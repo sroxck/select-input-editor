@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 14:33:19
+ * @LastEditTime: 2023-10-27 10:54:24
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -106,6 +106,8 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
         blocks.value.splice(index + 1, 0, { input: `` });
         // 把当前行光标后的内容替换为空
         e.target.innerText = e.target.innerText.replace(enterTextBefore, '')
+        blocks.value[index].input = e.target.innerText
+
         //设置回车后的下一行的内容为光标后的值
         blocks.value[index + 1].input = enterTextBefore
         nextTick(() => {

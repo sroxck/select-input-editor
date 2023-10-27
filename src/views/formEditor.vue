@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-26 17:40:03
+ * @LastEditTime: 2023-10-27 11:04:23
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -27,13 +27,21 @@ const {
   focusEvent,
   blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible)
 
+const life = ref(true)
 const startForm = () => {
   isFormStart.value = true
   nextTick(() => {
     (blocksRef.value as any)[0].divRef.focus()
   })
 }
-
+const deleteCurrentItem = (index: number) => {
+  if (index == 0 && blocks.value.length <= 1) return
+  life.value = false
+  blocks.value.splice(index, 1)
+  nextTick(()=>{
+    life.value = true
+  })
+}
 </script>
 <template>
   <div class="container">
@@ -57,12 +65,12 @@ const startForm = () => {
       </div>
       <form-tip />
     </div>
-    <div v-show="isFormStart">
+    <div v-if="isFormStart && life">
 
       <div v-for="item, index in blocks" :key="index" class="box">
-        <div :class="['iconBox',!['text','',null,undefined].includes(item.name)?'action':'']" >
-          <el-icon>
-            <SvgIcon name="shanchu"  size="large"></SvgIcon>
+        <div :class="['iconBox', !['text', '', null, undefined].includes(item.name) ? 'action' : '']">
+          <el-icon @click="deleteCurrentItem(index)">
+            <SvgIcon name="shanchu" size="large"></SvgIcon>
           </el-icon>
           <el-icon>
             <SvgIcon name="tianjia" color="primary" size="large"></SvgIcon>
@@ -101,13 +109,17 @@ const startForm = () => {
 </template>
 
 <style>
-
-.box{
+.box {
   position: relative;
 }
-.box:hover .iconBox{
+
+.box:focus-within .iconBox {
   display: block;
 }
+.box:hover .iconBox {
+  display: block;
+}
+
 .container-tip-button {
   color: rgb(137, 136, 132);
   font-weight: 500 !important;
@@ -124,9 +136,11 @@ const startForm = () => {
   display: flex;
   align-items: center;
 }
-.action{
+
+.action {
   top: 3px !important;
 }
+
 .iconBox {
   display: none;
   position: absolute;

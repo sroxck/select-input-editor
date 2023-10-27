@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-26 10:16:50
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-26 10:43:37
+ * @LastEditTime: 2023-10-27 10:12:26
  * @Description: 
 -->
 <script setup lang="ts">
@@ -17,7 +17,6 @@ const { locale } = useI18n()
     <div>
       <span><el-icon><Star /></el-icon></span>
       <div>
-
         <el-dropdown @command="(value: string) => locale = value">
           <button>{{$t('button.language')}}</button>
           <template #dropdown>
