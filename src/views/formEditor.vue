@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-27 17:36:43
+ * @LastEditTime: 2023-10-27 17:53:01
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -17,9 +17,9 @@ const blocks = ref([{ input: '', name: 'text' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
-  import { useTextSelection } from '@vueuse/core'
-  const state = useTextSelection()
-  console.log(state)
+import { useTextSelection } from '@vueuse/core'
+const state = useTextSelection()
+console.log(state)
 const {
   inputEvent,
   titleEvent,
@@ -41,28 +41,28 @@ const deleteCurrentItem = (index: number) => {
   if (index == 0 && blocks.value.length <= 1) return
   life.value = false
   blocks.value.splice(index, 1)
-  nextTick(()=>{
+  nextTick(() => {
     life.value = true
   })
 }
 const selectedText = ref('')
-document.addEventListener('selectionchange', function() {
-   selectedText.value = window.getSelection()!.toString();
+document.addEventListener('selectionchange', function () {
+  selectedText.value = window.getSelection()!.toString();
   // console.log('选中的文字:', selectedText);
-  
+
 });
 // const res = document.querySelector('.tools')! as any
 // console.log(res,'22222')
 // res.style.top = (state.rects.value[0].top+20) + 'px'
 // res.style.left = state.rects.value[0].left + 'px'
-const mouseupEvent = (e,index)=>{
-  if(selectedText.value == '' || !selectedText.value) {
+const mouseupEvent = (e:Event, index:number) => {
+  if (selectedText.value == '' || !selectedText.value) {
     console.log(222222)
     tools.value!.style.opacity = '0'
-  }else{
+  } else {
     tools.value!.style.opacity = '1';
-  tools.value!.style.top =  (state.rects.value[0].top+20) + 'px'
-  tools.value!.style.left =  (state.rects.value[0].left) + 'px'
+    tools.value!.style.top = (state.rects.value[0].top + 20) + 'px'
+    tools.value!.style.left = (state.rects.value[0].left) + 'px'
   }
 
 }
@@ -121,9 +121,9 @@ const tools = ref<HTMLElement>()
             <SvgIcon name="tuozhuai" color="primary" size="large"></SvgIcon>
           </el-icon>
         </div>
-        <basic-editor @mouseup="mouseupEvent($event, index)"  @blur="blurEvent" @input="inputEvent($event, index)" @focus="focusEvent"
-          @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent" ref="blocksRef" class="container-block"
-          data-placeholder="">
+        <basic-editor @mouseup="mouseupEvent($event, index)" @blur="blurEvent" @input="inputEvent($event, index)"
+          @focus="focusEvent" @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent" ref="blocksRef"
+          class="container-block" data-placeholder="">
           <component :is="item.name"></component>
         </basic-editor>
       </div>
@@ -154,21 +154,26 @@ const tools = ref<HTMLElement>()
 .box {
   position: relative;
 }
-.tools{
+
+.tools {
+  z-index: 22;
   height: 36px;
-    width: 200px;
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    background: #fff;
+  width: 200px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fff;
+  opacity: 0;
 
 }
+
 .box:focus-within .iconBox {
   display: block;
 }
+
 .box:hover .iconBox {
   display: block;
 }
