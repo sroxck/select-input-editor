@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-27 16:00:43
+ * @LastEditTime: 2023-10-27 17:36:43
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -17,6 +17,9 @@ const blocks = ref([{ input: '', name: 'text' }])
 const blocksRef = ref(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
+  import { useTextSelection } from '@vueuse/core'
+  const state = useTextSelection()
+  console.log(state)
 const {
   inputEvent,
   titleEvent,
@@ -42,9 +45,48 @@ const deleteCurrentItem = (index: number) => {
     life.value = true
   })
 }
+const selectedText = ref('')
+document.addEventListener('selectionchange', function() {
+   selectedText.value = window.getSelection()!.toString();
+  // console.log('选中的文字:', selectedText);
+  
+});
+// const res = document.querySelector('.tools')! as any
+// console.log(res,'22222')
+// res.style.top = (state.rects.value[0].top+20) + 'px'
+// res.style.left = state.rects.value[0].left + 'px'
+const mouseupEvent = (e,index)=>{
+  if(selectedText.value == '' || !selectedText.value) {
+    console.log(222222)
+    tools.value!.style.opacity = '0'
+  }else{
+    tools.value!.style.opacity = '1';
+  tools.value!.style.top =  (state.rects.value[0].top+20) + 'px'
+  tools.value!.style.left =  (state.rects.value[0].left) + 'px'
+  }
+
+}
+const tools = ref<HTMLElement>()
 </script>
 <template>
   <div class="container">
+    <div class="tools" ref="tools">
+      <el-icon>
+        <SvgIcon name="fontbold" size="large"></SvgIcon>
+      </el-icon>
+      <el-icon>
+        <SvgIcon name="italic" size="large"></SvgIcon>
+      </el-icon>
+      <el-icon>
+        <SvgIcon name="zitidaxiao" size="large"></SvgIcon>
+      </el-icon>
+      <el-icon>
+        <SvgIcon name="zitixiahuaxian" size="large"></SvgIcon>
+      </el-icon>
+      <el-icon>
+        <SvgIcon name="lianjie" size="large"></SvgIcon>
+      </el-icon>
+    </div>
     <tool-bar></tool-bar>
     <basic-editor @keypress="titlePressEvent($event, 0)" @input="titleEvent($event, true)" class="container-title"
       data-placeholder="Form title" contenteditable="true" />
@@ -79,7 +121,7 @@ const deleteCurrentItem = (index: number) => {
             <SvgIcon name="tuozhuai" color="primary" size="large"></SvgIcon>
           </el-icon>
         </div>
-        <basic-editor @blur="blurEvent" @input="inputEvent($event, index)" @focus="focusEvent"
+        <basic-editor @mouseup="mouseupEvent($event, index)"  @blur="blurEvent" @input="inputEvent($event, index)" @focus="focusEvent"
           @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent" ref="blocksRef" class="container-block"
           data-placeholder="">
           <component :is="item.name"></component>
@@ -112,7 +154,18 @@ const deleteCurrentItem = (index: number) => {
 .box {
   position: relative;
 }
+.tools{
+  height: 36px;
+    width: 200px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: #fff;
 
+}
 .box:focus-within .iconBox {
   display: block;
 }
