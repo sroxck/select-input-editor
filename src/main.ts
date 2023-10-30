@@ -2,10 +2,10 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 10:34:00
+ * @LastEditTime: 2023-10-30 16:52:11
  * @Description: 
  */
-import './assets/main.css'
+import './assets/main.styl'
 import "virtual:svg-icons-register";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { VueElement, createApp } from 'vue'

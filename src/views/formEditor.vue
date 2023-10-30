@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 15:28:03
+ * @LastEditTime: 2023-10-30 18:21:02
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -18,6 +18,8 @@ const blocksRef = ref<any>(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
 import { useTextSelection } from '@vueuse/core'
+import { toRaw } from 'vue';
+import { toRef } from 'vue';
 const state = useTextSelection()
 console.log(state)
 const life = ref(true)
@@ -30,7 +32,7 @@ const {
   keyDownEvent,
   isFormStart,
   focusEvent,
-  blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible,life)
+  blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible, life)
 
 const startForm = () => {
   isFormStart.value = true
@@ -48,51 +50,91 @@ const deleteCurrentItem = (index: number) => {
 }
 const selectedText = ref('')
 document.addEventListener('selectionchange', function () {
-  selectedText.value = window.getSelection()!.toString();
+  // selectedText.value = window.getSelection()!.toString();
   // console.log('选中的文字:', selectedText);
+  // console.log(state)
+  
 
 });
 // const res = document.querySelector('.tools')! as any
 // console.log(res,'22222')
 // res.style.top = (state.rects.value[0].top+20) + 'px'
 // res.style.left = state.rects.value[0].left + 'px'
-const mouseupEvent = (e:Event, index:number) => {
-  if (selectedText.value == '' || !selectedText.value) {
+const currentIndex = ref(0)
+const currentSelectText = ref('')
+let currentSelect :any= ''
+const mouseupEvent = (e: Event, index: number) => {
+  console.log(state, 'state')
+  currentIndex.value = index
+  currentSelectText.value = window.getSelection()!.toString();
+  console.log(currentSelectText.value ,'currentSelectText.value ')
+const {selection} = state
+const {value} = selection
+  console.log(value,'currentSelect')
+  currentSelect = value.baseNode
+
+  if (currentSelectText.value == '' ) {
     console.log(222222)
     tools.value!.style.opacity = '0'
   } else {
     tools.value!.style.opacity = '1';
     tools.value!.style.top = (state.rects.value[0].top + 20) + 'px'
     tools.value!.style.left = (state.rects.value[0].left) + 'px'
-  }
 
+  }
 }
 const tools = ref<HTMLElement>()
 // 组件列表的点击事件
-const selectComponent = (item,index)=>{
-  console.log(item,index,'点击了')
+const selectComponent = (item, index) => {
+  // console.log(item,index,'点击了')
   if (selectListVisible.value) {
-        // if (selectList.value[index.value]?.component == 'none') return
-        // blocks.value.push({ name: item?.component || '' ,input:''});
-        // // e.target.innerText = text.slice(0, text.length - 1).join('/')
-        // // e.target.blur()
-        // // selectListVisible.value = false
-        // // index.value = 0
-        // // updateSelection()
-        // nextTick(() => {
-        //   // blocksRef.value!.at(-1).divRef.removeAttribute('data-placeholder');
-        //   // blocksRef.value!.at(-1).divRef.setAttribute('contenteditable', 'false')
-        //   // blocks.value.push({ name: 'text' ,input:''});
-        //   // blocksRef.value.at(-1).divRef.focus()
-        // })
+    // if (selectList.value[index.value]?.component == 'none') return
+    // blocks.value.push({ name: item?.component || '' ,input:''});
+    // // e.target.innerText = text.slice(0, text.length - 1).join('/')
+    // // e.target.blur()
+    // // selectListVisible.value = false
+    // // index.value = 0
+    // // updateSelection()
+    // nextTick(() => {
+    //   // blocksRef.value!.at(-1).divRef.removeAttribute('data-placeholder');
+    //   // blocksRef.value!.at(-1).divRef.setAttribute('contenteditable', 'false')
+    //   // blocks.value.push({ name: 'text' ,input:''});
+    //   // blocksRef.value.at(-1).divRef.focus()
+    // })
 
-      }
+  }
+}
+const jc = (e) => {
+  e.preventDefault();
+  const selection = window.getSelection()!;
+   const range = selection.getRangeAt(0);
+   console.log(range,'range')
+      const newNode = document.createElement('span');
+      range.surroundContents(newNode);
+  // const selection = window.getSelection()!;
+  //       const cursorOffset = selection.focusOffset;
+  //       const range = document.createRange();
+
+  //       console.log(cursorOffset, 'selection', selection,range)
+
+  // selectedText.value = window.getSelection()!.toString();
+  //   console.log('选中的文字:', selectedText );
+  // todo: 1 文字匹配需要 根据索引 避免相同文字
+  // 2: 需要可以覆盖标签  
+  // const text = blocksRef.value[currentIndex.value].divRef.innerHTML
+
+  // const newText =text.slice(0, currentSelect.value) + text.slice(currentSelect.value).replace(currentSelectText.value, `<b>${currentSelectText.value}</b>`);
+  // console.log(newText, 'newText', text)
+  // blocks.value[currentIndex.value].input = newText
+  // console.log(blocks.value[currentIndex.value], 'blocks.value[currentIndex.value]')
+  // blocksRef.value[currentIndex.value].divRef.innerHTML = newText
+  // tools.value!.style.opacity = '0'
 }
 </script>
 <template>
   <div class="container">
     <div class="tools" ref="tools">
-      <el-icon>
+      <el-icon @click="jc">
         <SvgIcon name="fontbold" size="large"></SvgIcon>
       </el-icon>
       <el-icon>
@@ -142,9 +184,9 @@ const selectComponent = (item,index)=>{
             <SvgIcon name="tuozhuai" color="primary" size="large"></SvgIcon>
           </el-icon>
         </div>
-        <basic-editor :name="item.name" :value="item.input" @mouseup="mouseupEvent($event, index)" @blur="blurEvent" @input="inputEvent($event, index)"
-          @focus="focusEvent" @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent($event, index)" ref="blocksRef"
-          class="container-block" data-placeholder="">
+        <basic-editor :name="item.name" :value="item.input" @mouseup="mouseupEvent($event, index)" @blur="blurEvent"
+          @input="inputEvent($event, index)" @focus="focusEvent" @keypress="keyPressEvent($event, index)"
+          @keydown="keyDownEvent($event, index)" ref="blocksRef" class="container-block" data-placeholder="">
           <component :is="item.name"></component>
         </basic-editor>
       </div>
@@ -152,7 +194,7 @@ const selectComponent = (item,index)=>{
     </div>
     <FormList v-show="!isFormStart"></FormList>
     <div class="select" v-show="selectListVisible">
-      <div @mousedown="selectComponent(item,index)" v-for="item, index in selectList" :key="index" :class="{
+      <div @mousedown="selectComponent(item, index)" v-for="item, index in selectList" :key="index" :class="{
         'select-item': true,
         active: item.active && item.component != '-', noHover: item.component == '-'
       }" tabindex="0">
