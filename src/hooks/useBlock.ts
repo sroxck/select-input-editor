@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 15:55:03
+ * @LastEditTime: 2023-10-30 16:11:23
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -199,6 +199,28 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
         e.preventDefault();
         activeSelectIndex.value = Math.max(0, activeSelectIndex.value - 1);
         updateSelection();
+      }
+    }else if(e.isComposing == false){
+      if (e.code == 'ArrowDown') {
+        blocksRef.value[index+1].divRef.focus()
+        // e.preventDefault();
+        // activeSelectIndex.value = Math.min(selectList.value.length - 1, activeSelectIndex.value + 1);
+        // updateSelection();
+      }
+      if (e.code == 'ArrowUp') {
+        // 上箭头事件
+        e.preventDefault();
+        blocksRef.value[index-1].divRef.focus()
+        const selection = window.getSelection()!;
+        const cursorOffset = selection.focusOffset;
+        console.log(cursorOffset, 'selection', selection)
+        const range = document.createRange();
+        range.setStart(blocksRef.value[index-1].divRef, 1);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // updateSelection();
       }
     }
   }
