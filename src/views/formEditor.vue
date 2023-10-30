@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 14:00:57
+ * @LastEditTime: 2023-10-30 15:28:03
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -14,7 +14,7 @@ import FormTip from '../components/form-tip.vue'
 import ToolBar from '../components/tool-bar.vue'
 import FormList from '../components/form-list.vue'
 const blocks = ref([{ input: '', name: 'text' }])
-const blocksRef = ref(null)
+const blocksRef = ref<any>(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
 import { useTextSelection } from '@vueuse/core'
@@ -68,6 +68,26 @@ const mouseupEvent = (e:Event, index:number) => {
 
 }
 const tools = ref<HTMLElement>()
+// 组件列表的点击事件
+const selectComponent = (item,index)=>{
+  console.log(item,index,'点击了')
+  if (selectListVisible.value) {
+        // if (selectList.value[index.value]?.component == 'none') return
+        // blocks.value.push({ name: item?.component || '' ,input:''});
+        // // e.target.innerText = text.slice(0, text.length - 1).join('/')
+        // // e.target.blur()
+        // // selectListVisible.value = false
+        // // index.value = 0
+        // // updateSelection()
+        // nextTick(() => {
+        //   // blocksRef.value!.at(-1).divRef.removeAttribute('data-placeholder');
+        //   // blocksRef.value!.at(-1).divRef.setAttribute('contenteditable', 'false')
+        //   // blocks.value.push({ name: 'text' ,input:''});
+        //   // blocksRef.value.at(-1).divRef.focus()
+        // })
+
+      }
+}
 </script>
 <template>
   <div class="container">
@@ -132,7 +152,7 @@ const tools = ref<HTMLElement>()
     </div>
     <FormList v-show="!isFormStart"></FormList>
     <div class="select" v-show="selectListVisible">
-      <div v-for="item, index in selectList" :key="index" :class="{
+      <div @mousedown="selectComponent(item,index)" v-for="item, index in selectList" :key="index" :class="{
         'select-item': true,
         active: item.active && item.component != '-', noHover: item.component == '-'
       }" tabindex="0">
@@ -151,10 +171,10 @@ const tools = ref<HTMLElement>()
   </div>
 </template>
 
-<style>
-.box {
-  position: relative;
-}
+<style lang="stylus">
+.box
+ position relative
+
 
 .tools {
   z-index: 22;
