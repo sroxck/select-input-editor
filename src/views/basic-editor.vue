@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-23 16:12:03
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 10:40:03
+ * @LastEditTime: 2023-10-30 14:05:36
  * @Description: 
 -->
 <script setup lang="ts">
@@ -10,6 +10,7 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 const props = defineProps<{
   value?: string,
+  name?:string
 }>()
 
 const divRef = ref<HTMLElement | null>(null)
@@ -19,7 +20,14 @@ defineExpose({
 
 const edit: any = 'plaintext-only'
 onMounted(() => {
-  divRef.value!.innerHTML = props.value || ''
+  if(props.name == 'text' || props.name == '' || props.name == undefined){
+    console.log( props.value,'vvv')
+    divRef.value!.innerText = props.value || ''
+  }else{
+    console.log( props.name,' props.name')
+    console.log( props.value,'vvveee')
+
+  }
 })
 </script>
 <template>

@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-27 16:01:26
+ * @LastEditTime: 2023-10-30 14:06:12
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -12,7 +12,7 @@ import { nextTick, onMounted, ref, type Ref } from "vue"
 const activeSelectIndex = ref(0)
 const isFormStart = ref(false)
 
-export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectListVisible: Ref) {
+export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectListVisible: Ref,life:Ref) {
 
   /** 失去焦点: 移除PlaceHolder */
   const blurEvent = (event: Event) => {
@@ -148,12 +148,21 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
   }
 
   /** 注册方向按键事件,获取当前所选择的组件 */
-  const keyDownEvent = (e: any) => {
+  const keyDownEvent = (e: any,index:number) => {
     if (e.code == 'Backspace') {
       console.log(e.target.innerText)
       if (e.target.innerText == '' && blocks.value.length == 1) {
         isFormStart.value = false
       }
+      if(e.target.innerText == '' &&blocks.value.length>1){
+        console.log(e.code,'测',blocks.value[index],)
+        life.value = false
+        blocks.value.splice(index, 1)
+        nextTick(() => {
+          life.value = true
+        })
+      }
+      // 删除当前行
     }
     console.log(e, '测试')
     // 下箭头事件

@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 10:28:53
+ * @LastEditTime: 2023-10-30 14:00:57
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -20,6 +20,8 @@ const selectListVisible = ref(false)
 import { useTextSelection } from '@vueuse/core'
 const state = useTextSelection()
 console.log(state)
+const life = ref(true)
+
 const {
   inputEvent,
   titleEvent,
@@ -28,9 +30,8 @@ const {
   keyDownEvent,
   isFormStart,
   focusEvent,
-  blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible)
+  blurEvent } = useBlock(blocksRef, blocks, selectList, selectListVisible,life)
 
-const life = ref(true)
 const startForm = () => {
   isFormStart.value = true
   nextTick(() => {
@@ -121,8 +122,8 @@ const tools = ref<HTMLElement>()
             <SvgIcon name="tuozhuai" color="primary" size="large"></SvgIcon>
           </el-icon>
         </div>
-        <basic-editor :value="item.input" @mouseup="mouseupEvent($event, index)" @blur="blurEvent" @input="inputEvent($event, index)"
-          @focus="focusEvent" @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent" ref="blocksRef"
+        <basic-editor :name="item.name" :value="item.input" @mouseup="mouseupEvent($event, index)" @blur="blurEvent" @input="inputEvent($event, index)"
+          @focus="focusEvent" @keypress="keyPressEvent($event, index)" @keydown="keyDownEvent($event, index)" ref="blocksRef"
           class="container-block" data-placeholder="">
           <component :is="item.name"></component>
         </basic-editor>
