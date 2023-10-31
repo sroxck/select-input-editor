@@ -2,11 +2,11 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 18:21:02
+ * @LastEditTime: 2023-10-31 11:48:35
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
-import { nextTick, ref } from 'vue';
+import { nextTick, ref,unref } from 'vue';
 import { components } from '../utils/dict'
 import { useBlock } from '../hooks/useBlock'
 import basicEditor from './basic-editor.vue'
@@ -18,10 +18,7 @@ const blocksRef = ref<any>(null)
 const selectList = ref(components)
 const selectListVisible = ref(false)
 import { useTextSelection } from '@vueuse/core'
-import { toRaw } from 'vue';
-import { toRef } from 'vue';
 const state = useTextSelection()
-console.log(state)
 const life = ref(true)
 
 const {
@@ -48,45 +45,60 @@ const deleteCurrentItem = (index: number) => {
     life.value = true
   })
 }
-const selectedText = ref('')
+const toolShow = ref<boolean>(false)
+const tools = ref<HTMLElement>()
+const currentSelectText = ref('') // 当前选中的文字
+const currentSelectIndex = ref(0)
+const blockIndex = ref(0)
 document.addEventListener('selectionchange', function () {
-  // selectedText.value = window.getSelection()!.toString();
-  // console.log('选中的文字:', selectedText);
-  // console.log(state)
-  
+  // if(state.selection.value.focusOffset!=0){
+  //   console.log('测试')
+  //   currentSelect = state.selection.value
+  // }
 
 });
-// const res = document.querySelector('.tools')! as any
-// console.log(res,'22222')
-// res.style.top = (state.rects.value[0].top+20) + 'px'
-// res.style.left = state.rects.value[0].left + 'px'
-const currentIndex = ref(0)
-const currentSelectText = ref('')
-let currentSelect :any= ''
-const mouseupEvent = (e: Event, index: number) => {
-  console.log(state, 'state')
-  currentIndex.value = index
-  currentSelectText.value = window.getSelection()!.toString();
-  console.log(currentSelectText.value ,'currentSelectText.value ')
-const {selection} = state
-const {value} = selection
-  console.log(value,'currentSelect')
-  currentSelect = value.baseNode
 
+const mousedownEvent = (e:Event) =>{
+ 
+}
+const mouseupEvent = (e: Event, index: number) => {
+  blockIndex.value = index
+  console.log(state,'state')
+  currentSelectIndex.value =  state.ranges.value[0].startOffset
+  currentSelectText.value = window.getSelection()!;
+  console.log(currentSelectText,'currentSelectText')
   if (currentSelectText.value == '' ) {
-    console.log(222222)
-    tools.value!.style.opacity = '0'
-  } else {
-    tools.value!.style.opacity = '1';
+    toolShow.value= false
+  } else { 
+    toolShow.value= true
     tools.value!.style.top = (state.rects.value[0].top + 20) + 'px'
     tools.value!.style.left = (state.rects.value[0].left) + 'px'
-
   }
 }
-const tools = ref<HTMLElement>()
+
+const jc = (e:any) => {
+  console.log(currentSelectIndex,currentSelectText,'加粗按钮被激活')
+  // todo: 1 文字匹配需要 根据索引 避免相同文字
+  // 2: 需要可以覆盖标签  
+  const text = blocksRef.value[blockIndex.value].divRef.innerHTML
+  const newText = text.slice(currentSelectIndex.value).replace(unref(currentSelectText),`<b>${unref(currentSelectText)}</b>`)
+  const res = text.slice(0, currentSelectIndex.value) + newText
+  blocks.value[blockIndex.value].input = res
+  blocksRef.value[blockIndex.value].divRef.innerHTML = res
+  toolShow.value = false
+    console.log("🚀 ~ file: formEditor.vue:84 ~ jc ~ res:", res)
+    console.log(text,'text')
+  // const newText =text.slice(0, currentSelect.value) + text.slice(currentSelect.value).replace(currentSelectText.value, `<b>${currentSelectText.value}</b>`);
+  // console.log(newText, 'newText', text)
+  // blocks.value[currentSelectIndex.value].input = newText
+  // console.log(blocks.value[currentSelectIndex.value], 'blocks.value[currentSelectIndex.value]')
+  // blocksRef.value[currentSelectIndex.value].divRef.innerHTML = newText
+  // tools.value!.style.opacity = '0'
+}
+
+
 // 组件列表的点击事件
 const selectComponent = (item, index) => {
-  // console.log(item,index,'点击了')
   if (selectListVisible.value) {
     // if (selectList.value[index.value]?.component == 'none') return
     // blocks.value.push({ name: item?.component || '' ,input:''});
@@ -104,51 +116,35 @@ const selectComponent = (item, index) => {
 
   }
 }
-const jc = (e) => {
-  e.preventDefault();
-  const selection = window.getSelection()!;
-   const range = selection.getRangeAt(0);
-   console.log(range,'range')
-      const newNode = document.createElement('span');
-      range.surroundContents(newNode);
-  // const selection = window.getSelection()!;
-  //       const cursorOffset = selection.focusOffset;
-  //       const range = document.createRange();
-
-  //       console.log(cursorOffset, 'selection', selection,range)
-
-  // selectedText.value = window.getSelection()!.toString();
-  //   console.log('选中的文字:', selectedText );
-  // todo: 1 文字匹配需要 根据索引 避免相同文字
-  // 2: 需要可以覆盖标签  
-  // const text = blocksRef.value[currentIndex.value].divRef.innerHTML
-
-  // const newText =text.slice(0, currentSelect.value) + text.slice(currentSelect.value).replace(currentSelectText.value, `<b>${currentSelectText.value}</b>`);
-  // console.log(newText, 'newText', text)
-  // blocks.value[currentIndex.value].input = newText
-  // console.log(blocks.value[currentIndex.value], 'blocks.value[currentIndex.value]')
-  // blocksRef.value[currentIndex.value].divRef.innerHTML = newText
-  // tools.value!.style.opacity = '0'
-}
 </script>
 <template>
   <div class="container">
-    <div class="tools" ref="tools">
-      <el-icon @click="jc">
+    <div class="tools" ref="tools" v-show="toolShow">
+      <el-button>
+        <el-icon @click="jc">
         <SvgIcon name="fontbold" size="large"></SvgIcon>
       </el-icon>
+      </el-button>
+     <el-button>
       <el-icon>
         <SvgIcon name="italic" size="large"></SvgIcon>
       </el-icon>
+     </el-button>
+     <el-button>
       <el-icon>
         <SvgIcon name="zitidaxiao" size="large"></SvgIcon>
       </el-icon>
+     </el-button>
+    <el-button>
       <el-icon>
         <SvgIcon name="zitixiahuaxian" size="large"></SvgIcon>
       </el-icon>
+    </el-button>
+     <el-button>
       <el-icon>
         <SvgIcon name="lianjie" size="large"></SvgIcon>
       </el-icon>
+     </el-button>
     </div>
     <tool-bar></tool-bar>
     <basic-editor @keypress="titlePressEvent($event, 0)" @input="titleEvent($event, true)" class="container-title"
@@ -184,7 +180,7 @@ const jc = (e) => {
             <SvgIcon name="tuozhuai" color="primary" size="large"></SvgIcon>
           </el-icon>
         </div>
-        <basic-editor :name="item.name" :value="item.input" @mouseup="mouseupEvent($event, index)" @blur="blurEvent"
+        <basic-editor :name="item.name" :value="item.input" @mousedown="mousedownEvent" @mouseup="mouseupEvent($event, index)" @blur="blurEvent"
           @input="inputEvent($event, index)" @focus="focusEvent" @keypress="keyPressEvent($event, index)"
           @keydown="keyDownEvent($event, index)" ref="blocksRef" class="container-block" data-placeholder="">
           <component :is="item.name"></component>
@@ -229,7 +225,7 @@ const jc = (e) => {
   border: 1px solid #eee;
   border-radius: 10px;
   background: #fff;
-  opacity: 0;
+  opacity: 1;
 
 }
 

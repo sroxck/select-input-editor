@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 16:23:39
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-30 16:11:23
+ * @LastEditTime: 2023-10-31 10:46:02
  * @Description: 
  */
 import type { BlockEvent } from "@/utils/type"
@@ -16,16 +16,10 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
 
   /** 失去焦点: 移除PlaceHolder */
   const blurEvent = (event: Event) => {
-    // console.log('失去焦点了')
     const e = event as BlockEvent
     selectListVisible.value = false
     activeSelectIndex.value = 0
     e.target.removeAttribute('data-placeholder')
-    // sett
-    // selectListVisible.value = false
-    // activeSelectIndex.value = 0
-    // e.target.removeAttribute('data-placeholder')
-
   }
 
   /** */
@@ -165,13 +159,9 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
         blocks.value.splice(index, 1)
         nextTick(() => {
           life.value = true
-          console.log(index, 'index')
-          console.log(blocksRef.value, 'blocksRef.value')
           nextTick(() => {
             blocksRef.value[index - 1].divRef.focus()
             const selection = window.getSelection()!;
-            const cursorOffset = selection.focusOffset;
-            console.log(cursorOffset, 'selection', selection)
             const range = document.createRange();
             range.setStart(blocksRef.value[index - 1].divRef, 1);
             range.collapse(true);
@@ -187,7 +177,6 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
     // 下箭头事件
     // todo: 当组件列表开启时 上下选择组件 否则上下切换当前编辑项
     if (selectListVisible.value) {
-      console.log(e, '测试')
 
       if (e.code == 'ArrowDown') {
         e.preventDefault();
@@ -212,8 +201,6 @@ export function useBlock(blocksRef: Ref, blocks: Ref, selectList: Ref, selectLis
         e.preventDefault();
         blocksRef.value[index-1].divRef.focus()
         const selection = window.getSelection()!;
-        const cursorOffset = selection.focusOffset;
-        console.log(cursorOffset, 'selection', selection)
         const range = document.createRange();
         range.setStart(blocksRef.value[index-1].divRef, 1);
         range.collapse(true);
