@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-31 11:48:35
+ * @LastEditTime: 2023-11-03 15:37:35
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -15,6 +15,7 @@ import ToolBar from '../components/tool-bar.vue'
 import FormList from '../components/form-list.vue'
 const blocks = ref([{ input: '', name: 'text' }])
 const blocksRef = ref<any>(null)
+
 const selectList = ref(components)
 const selectListVisible = ref(false)
 import { useTextSelection } from '@vueuse/core'
@@ -122,8 +123,8 @@ const selectComponent = (item, index) => {
     <div class="tools" ref="tools" v-show="toolShow">
       <el-button>
         <el-icon @click="jc">
-        <SvgIcon name="fontbold" size="large"></SvgIcon>
-      </el-icon>
+        <SvgIcon name="fontbold" size="large"></SvgIcon>  
+      </el-icon> 
       </el-button>
      <el-button>
       <el-icon>
