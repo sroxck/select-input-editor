@@ -2,16 +2,13 @@
  * @Author: sroxck
  * @Date: 2023-10-26 10:16:50
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-27 10:12:26
+ * @LastEditTime: 2023-11-06 11:26:24
  * @Description: 
 -->
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 const { locale } = useI18n()
-
-
 </script>
-
 <template>
   <div class="tool">
     <div>

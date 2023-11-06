@@ -2,19 +2,13 @@
  * @Author: sroxck
  * @Date: 2023-10-24 15:19:54
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-24 17:51:38
+ * @LastEditTime: 2023-11-06 15:13:50
  * @Description: 
 -->
-<script setup lang="ts">
-
-
-</script>
-
 <template>
   <el-row class="list">
     <el-col class="list-item" :span="12" :xs="24">
         <div class="title">
-         
           {{$t('list.left.title')}}
         </div>
         <div class="text">

@@ -1,8 +1,10 @@
-<script setup lang="ts">
-
-
-</script>
-
+<!--
+ * @Author: sroxck
+ * @Date: 2023-10-24 13:34:58
+ * @LastEditors: sroxck
+ * @LastEditTime: 2023-11-06 16:11:17
+ * @Description: 
+-->
 <template>
  <div class="tip">
   {{$t("tip.title")}}
@@ -20,7 +22,7 @@
   color      : rgb(55, 53, 47);
   line-height: 1.5;
   font-size  : 16px;
-  user-select:none;
+  user-select: none;
 }
 
 .tip em {

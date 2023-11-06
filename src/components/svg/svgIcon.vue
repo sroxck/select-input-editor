@@ -2,12 +2,10 @@
  * @Author: sroxck
  * @Date: 2023-10-26 14:57:13
  * @LastEditors: sroxck
- * @LastEditTime: 2023-10-26 17:04:33
+ * @LastEditTime: 2023-11-06 15:15:36
  * @Description: 
 -->
 <script setup lang="ts">
-import { computed } from "vue";
-
 defineOptions({
   name: "SvgIcon",
 });
@@ -76,8 +74,7 @@ const sizeRef = computed(() => {
   </svg>
 
 </template>
-<style>
-.svg-icon-wrapper {
-  display: inline-block;
-}
+<style lang="stylus">
+.svg-icon-wrapper
+ display inline-block
 </style>

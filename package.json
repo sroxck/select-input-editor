@@ -18,7 +18,9 @@
     "element-plus": "^2.4.1",
     "pinia": "^2.1.6",
     "stylus": "^0.60.0",
+    "unplugin-auto-import": "^0.16.7",
     "unplugin-icons": "^0.17.1",
+    "unplugin-vue-components": "^0.25.2",
     "vue": "^3.3.4",
     "vue-i18n": "9",
     "vue-router": "^4.2.4"
