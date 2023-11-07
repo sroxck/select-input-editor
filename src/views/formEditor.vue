@@ -2,7 +2,7 @@
  * @Author: sroxck
  * @Date: 2023-10-19 10:33:44
  * @LastEditors: sroxck
- * @LastEditTime: 2023-11-06 17:04:44
+ * @LastEditTime: 2023-11-07 09:36:15
  * @Description: 输入型下拉选择器扩展
 -->
 <script lang="ts" setup>
@@ -61,10 +61,12 @@ const mouseupEvent = (e: Event, index: number) => {
   console.log(state.text, 'state')
   currentSelectIndex.value = state.ranges.value[0].startOffset
   currentSelectText.value = window.getSelection()!;
-  console.log(currentSelectText.value,currentSelectText.value.isCollapsed, 'currentSelectText')
-  
-  if (currentSelectText.value.isCollapsed ) {
-    console.log(2222222)
+  // setTimeout(()=>{
+  // console.log( currentSelectText.value,currentSelectText.value.isCollapsed, 'currentSelectText.value.isCollapsed')
+
+  // },1000)
+  setTimeout(() => {
+    if (currentSelectText.value.isCollapsed ) {
     toolShow.value = false
   } else {
     toolShow.value = true
@@ -72,6 +74,8 @@ const mouseupEvent = (e: Event, index: number) => {
     tools.value!.divRef.style.top = (state.rects.value[0].top + 20) + 'px'
     tools.value!.divRef.style.left = (state.rects.value[0].left) + 'px'
   }
+  }, 100)
+ 
 }
 const select = useTextSelection()
 const jc = (e: any) => {
